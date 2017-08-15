@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.4.0 #8981 (Jul 11 2014) (Linux)
-; This file was generated Mon Aug 14 15:17:43 2017
+; Version 3.4.0 #8981 (Jul  5 2014) (Linux)
+; This file was generated Tue Aug 15 10:20:35 2017
 ;--------------------------------------------------------
 	.module mpu6050
 	.optsdcc -mstm8
@@ -1046,23 +1046,34 @@ _initMPU6050:
 ;	 function getMPU6050
 ;	-----------------------------------------
 _getMPU6050:
-	sub	sp, #3
+	sub	sp, #6
 ;	mpu6050.c: 439: xh = i2c_read_register (MPU6050_ADDR, 0x43);
 	push	#0x43
 	push	#0x68
 	call	_i2c_read_register
 	addw	sp, #2
-;	mpu6050.c: 440: xl = i2c_read_register (MPU6050_ADDR, 0x44);
-	push	a
+	ld	(0x02, sp), a
+;	mpu6050.c: 440: UARTPrintF("read 1 \n\r");
+	ldw	x, #___str_0+0
+	pushw	x
+	call	_UARTPrintF
+	addw	sp, #2
+;	mpu6050.c: 441: xl = i2c_read_register (MPU6050_ADDR, 0x44);
 	push	#0x44
 	push	#0x68
 	call	_i2c_read_register
 	addw	sp, #2
-	ld	(0x02, sp), a
-	pop	a
-;	mpu6050.c: 441: xx = xh << 8 | xl;
-	clrw	x
-	ld	xl, a
+	ld	(0x01, sp), a
+;	mpu6050.c: 442: UARTPrintF("read 2 \n\r");
+	ldw	x, #___str_1+0
+	pushw	x
+	call	_UARTPrintF
+	addw	sp, #2
+;	mpu6050.c: 443: xx = xh << 8 | xl;
+	ld	a, (0x02, sp)
+	ld	(0x06, sp), a
+	clr	(0x05, sp)
+	ldw	x, (0x05, sp)
 	sllw	x
 	sllw	x
 	sllw	x
@@ -1072,82 +1083,88 @@ _getMPU6050:
 	sllw	x
 	sllw	x
 	ld	a, (0x01, sp)
-	ld	(0x03, sp), a
-	clr	(0x02, sp)
+	ld	(0x04, sp), a
+	clr	(0x03, sp)
 	ld	a, xl
-	or	a, (0x03, sp)
+	or	a, (0x04, sp)
 	ld	xl, a
 	ld	a, xh
-	or	a, (0x02, sp)
+	or	a, (0x03, sp)
 	ld	xh, a
-;	mpu6050.c: 442: return(xx);
-	addw	sp, #3
+;	mpu6050.c: 444: return(xx);
+	addw	sp, #6
 	ret
-;	mpu6050.c: 446: int main () {
+;	mpu6050.c: 448: int main () {
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
 	sub	sp, #22
-;	mpu6050.c: 453: InitializeSystemClock();
+;	mpu6050.c: 455: InitializeSystemClock();
 	call	_InitializeSystemClock
-;	mpu6050.c: 456: PD_DDR = (1 << 3) | (1 << 2); // output mode
+;	mpu6050.c: 458: PD_DDR = (1 << 3) | (1 << 2); // output mode
 	ldw	x, #0x5011
 	ld	a, #0x0c
 	ld	(x), a
-;	mpu6050.c: 457: PB_DDR = (1 << 4);
+;	mpu6050.c: 459: PB_DDR = (0 << 4);
 	ldw	x, #0x5007
-	ld	a, #0x10
-	ld	(x), a
-;	mpu6050.c: 458: PB_DDR = (1 << 5);
+	clr	(x)
+;	mpu6050.c: 460: PB_DDR = (0 << 5);
 	ldw	x, #0x5007
-	ld	a, #0x20
+	clr	(x)
+;	mpu6050.c: 464: PD_CR2 = (1 << 3) | (1 << 2); // up to 10MHz speed
+	ldw	x, #0x5013
+	ld	a, #0x0c
 	ld	(x), a
-;	mpu6050.c: 459: PB_ODR &= ~(1 << 4);
-	ldw	x, #0x5005
-	ld	a, (x)
-	and	a, #0xef
-	ld	(x), a
-;	mpu6050.c: 460: PB_ODR &= ~(1 << 5);
-	ldw	x, #0x5005
-	ld	a, (x)
-	and	a, #0xdf
-	ld	(x), a
-;	mpu6050.c: 461: PB_CR1 = (1 << 4) | (1 << 5); // push-pull
-	ldw	x, #0x5008
-	ld	a, #0x30
-	ld	(x), a
-;	mpu6050.c: 467: InitializeUART();
+;	mpu6050.c: 465: PD_CR1 = 0; // push-pull
+	ldw	x, #0x5012
+	clr	(x)
+;	mpu6050.c: 466: PD_CR2 = 0; // up to 10MHz speed
+	ldw	x, #0x5013
+	clr	(x)
+;	mpu6050.c: 467: tm1637Init();
+	call	_tm1637Init
+;	mpu6050.c: 469: InitializeUART();
 	call	_InitializeUART
-;	mpu6050.c: 468: UARTPrintF("uart initialised \n\r");
-	ldw	x, #___str_0+0
+;	mpu6050.c: 470: UARTPrintF("uart initialised \n\r");
+	ldw	x, #___str_2+0
 	pushw	x
 	call	_UARTPrintF
 	addw	sp, #2
-;	mpu6050.c: 469: InitializeI2C();
+;	mpu6050.c: 471: InitializeI2C();
 	call	_InitializeI2C
-;	mpu6050.c: 470: delay(200);
+;	mpu6050.c: 472: delay(200);
 	push	#0xc8
 	push	#0x00
 	call	_delay
 	addw	sp, #2
-;	mpu6050.c: 472: initMPU6050();
+;	mpu6050.c: 473: UARTPrintF("testing 0 \n\r");
+	ldw	x, #___str_3+0
+	pushw	x
+	call	_UARTPrintF
+	addw	sp, #2
+;	mpu6050.c: 474: initMPU6050();
 	call	_initMPU6050
-;	mpu6050.c: 473: delay(200);
+;	mpu6050.c: 475: delay(200);
 	push	#0xc8
 	push	#0x00
 	call	_delay
 	addw	sp, #2
-;	mpu6050.c: 477: while (1) {
+;	mpu6050.c: 478: UARTPrintF("testing 1 \n\r");
+	ldw	x, #___str_4+0
+	pushw	x
+	call	_UARTPrintF
+	addw	sp, #2
+;	mpu6050.c: 479: while (1) {
 00114$:
-;	mpu6050.c: 478: objTemp = getMPU6050();
+;	mpu6050.c: 480: objTemp = getMPU6050();
 	call	_getMPU6050
 	pushw	x
 	call	___uint2fs
 	addw	sp, #2
-	ldw	(0x07, sp), x
-	ldw	(0x05, sp), y
-;	mpu6050.c: 482: while (objTemp > 1000) {
+	ldw	(0x05, sp), x
+	ldw	(0x03, sp), y
+;	mpu6050.c: 484: while (objTemp > 1000) {
 	clrw	x
 	ldw	(0x0b, sp), x
 00101$:
@@ -1155,181 +1172,181 @@ _main:
 	pushw	x
 	push	#0x7a
 	push	#0x44
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
 	call	___fsgt
 	addw	sp, #8
 	tnz	a
 	jreq	00127$
-;	mpu6050.c: 483: vierde+=1;
+;	mpu6050.c: 485: vierde+=1;
 	ldw	x, (0x0b, sp)
 	incw	x
 	ldw	(0x0b, sp), x
-;	mpu6050.c: 484: objTemp-=1000;
+;	mpu6050.c: 486: objTemp-=1000;
 	clrw	x
 	pushw	x
 	push	#0x7a
 	push	#0x44
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
 	call	___fssub
 	addw	sp, #8
-	ldw	(0x07, sp), x
-	ldw	(0x05, sp), y
+	ldw	(0x05, sp), x
+	ldw	(0x03, sp), y
 	jra	00101$
-;	mpu6050.c: 486: while (objTemp > 100) {
+;	mpu6050.c: 488: while (objTemp > 100) {
 00127$:
 	ldw	y, (0x0b, sp)
-	ldw	(0x0f, sp), y
+	ldw	(0x13, sp), y
 	clrw	x
-	ldw	(0x01, sp), x
+	ldw	(0x07, sp), x
 00104$:
 	clrw	x
 	pushw	x
 	push	#0xc8
 	push	#0x42
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
 	call	___fsgt
 	addw	sp, #8
 	tnz	a
 	jreq	00128$
-;	mpu6050.c: 487: derde+=1;
-	ldw	x, (0x01, sp)
+;	mpu6050.c: 489: derde+=1;
+	ldw	x, (0x07, sp)
 	incw	x
-	ldw	(0x01, sp), x
-;	mpu6050.c: 488: objTemp-=100;
+	ldw	(0x07, sp), x
+;	mpu6050.c: 490: objTemp-=100;
 	clrw	x
 	pushw	x
 	push	#0xc8
 	push	#0x42
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
 	call	___fssub
 	addw	sp, #8
-	ldw	(0x07, sp), x
-	ldw	(0x05, sp), y
+	ldw	(0x05, sp), x
+	ldw	(0x03, sp), y
 	jra	00104$
-;	mpu6050.c: 490: while (objTemp > 10) {
+;	mpu6050.c: 492: while (objTemp > 10) {
 00128$:
-	ldw	y, (0x01, sp)
-	ldw	(0x15, sp), y
+	ldw	y, (0x07, sp)
+	ldw	(0x11, sp), y
 	clrw	x
-	ldw	(0x03, sp), x
+	ldw	(0x09, sp), x
 00107$:
 	clrw	x
 	pushw	x
 	push	#0x20
 	push	#0x41
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
 	call	___fsgt
 	addw	sp, #8
 	tnz	a
 	jreq	00129$
-;	mpu6050.c: 491: tweede+=1;
-	ldw	x, (0x03, sp)
+;	mpu6050.c: 493: tweede+=1;
+	ldw	x, (0x09, sp)
 	incw	x
-	ldw	(0x03, sp), x
-;	mpu6050.c: 492: objTemp-=10;
+	ldw	(0x09, sp), x
+;	mpu6050.c: 494: objTemp-=10;
 	clrw	x
 	pushw	x
 	push	#0x20
 	push	#0x41
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
 	call	___fssub
 	addw	sp, #8
-	ldw	(0x07, sp), x
-	ldw	(0x05, sp), y
+	ldw	(0x05, sp), x
+	ldw	(0x03, sp), y
 	jra	00107$
-;	mpu6050.c: 494: while (objTemp > 0)
+;	mpu6050.c: 496: while (objTemp > 0)
 00129$:
-	ldw	y, (0x03, sp)
-	ldw	(0x13, sp), y
+	ldw	y, (0x09, sp)
+	ldw	(0x0f, sp), y
 	clrw	x
-	ldw	(0x09, sp), x
+	ldw	(0x01, sp), x
 00110$:
 	clrw	x
 	pushw	x
 	clrw	x
 	pushw	x
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
 	call	___fsgt
 	addw	sp, #8
 	tnz	a
 	jreq	00112$
-;	mpu6050.c: 496: eerste+=1;
-	ldw	x, (0x09, sp)
+;	mpu6050.c: 498: eerste+=1;
+	ldw	x, (0x01, sp)
 	incw	x
-	ldw	(0x09, sp), x
-;	mpu6050.c: 497: objTemp-=1;
+	ldw	(0x01, sp), x
+;	mpu6050.c: 499: objTemp-=1;
 	clrw	x
 	pushw	x
 	push	#0x80
 	push	#0x3f
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	pushw	x
 	call	___fssub
 	addw	sp, #8
-	ldw	(0x07, sp), x
-	ldw	(0x05, sp), y
+	ldw	(0x05, sp), x
+	ldw	(0x03, sp), y
 	jra	00110$
 00112$:
-;	mpu6050.c: 508: utemp=vierde*1000+derde*100+tweede*10+eerste;
-	ldw	x, (0x0f, sp)
+;	mpu6050.c: 510: utemp=vierde*1000+derde*100+tweede*10+eerste;
+	ldw	x, (0x13, sp)
 	pushw	x
 	push	#0xe8
 	push	#0x03
 	call	__mulint
 	addw	sp, #4
-	ldw	(0x11, sp), x
-	ldw	x, (0x15, sp)
+	ldw	(0x0d, sp), x
+	ldw	x, (0x11, sp)
 	pushw	x
 	push	#0x64
 	push	#0x00
 	call	__mulint
 	addw	sp, #4
-	addw	x, (0x11, sp)
-	ldw	(0x0d, sp), x
-	ldw	x, (0x13, sp)
+	addw	x, (0x0d, sp)
+	ldw	(0x15, sp), x
+	ldw	x, (0x0f, sp)
 	pushw	x
 	push	#0x0a
 	push	#0x00
 	call	__mulint
 	addw	sp, #4
-	addw	x, (0x0d, sp)
-	addw	x, (0x09, sp)
+	addw	x, (0x15, sp)
+	addw	x, (0x01, sp)
 	clrw	y
 	tnzw	x
 	jrpl	00162$
 	decw	y
 00162$:
-;	mpu6050.c: 511: tm1637DisplayDecimal(utemp, 1); // eg 37:12
+;	mpu6050.c: 513: tm1637DisplayDecimal(utemp, 1); // eg 37:12
 	push	#0x01
 	push	#0x00
 	pushw	x
 	pushw	y
 	call	_tm1637DisplayDecimal
 	addw	sp, #6
-;	mpu6050.c: 514: delayTenMicro();
+;	mpu6050.c: 517: delayTenMicro();
 	call	_delayTenMicro
 	jp	00114$
 	addw	sp, #22
@@ -1354,7 +1371,27 @@ _segmentMap:
 	.db #0x71	;  113	'q'
 	.db #0x00	;  0
 ___str_0:
+	.ascii "read 1 "
+	.db 0x0A
+	.db 0x0D
+	.db 0x00
+___str_1:
+	.ascii "read 2 "
+	.db 0x0A
+	.db 0x0D
+	.db 0x00
+___str_2:
 	.ascii "uart initialised "
+	.db 0x0A
+	.db 0x0D
+	.db 0x00
+___str_3:
+	.ascii "testing 0 "
+	.db 0x0A
+	.db 0x0D
+	.db 0x00
+___str_4:
+	.ascii "testing 1 "
 	.db 0x0A
 	.db 0x0D
 	.db 0x00

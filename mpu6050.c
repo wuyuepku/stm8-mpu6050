@@ -425,7 +425,7 @@ void initMPU6050(){
 #define GYRO_YOUT_L      0x46
 #define GYRO_ZOUT_H      0x47
 #define GYRO_ZOUT_L      0x48
- 
+
  *
  */
 
@@ -434,10 +434,12 @@ void initMPU6050(){
 
 unsigned int getMPU6050(){
 	UCHAR xh,xl; 
-        unsigned int xx;
+	unsigned int xx;
 
 	xh = i2c_read_register (MPU6050_ADDR, 0x43);
+	UARTPrintF("read 1 \n\r");
 	xl = i2c_read_register (MPU6050_ADDR, 0x44);
+	UARTPrintF("read 2 \n\r");
 	xx = xh << 8 | xl;
 	return(xx);
 }
@@ -451,29 +453,29 @@ int main () {
 	//	UCHAR  x;
 	//	volatile int reg;
 	InitializeSystemClock();
-
+	//reset I2C
+	PB_DDR = (0 << 4);
+	PB_DDR = (0 << 5);
+	//	PB_ODR &= ~(1 << 4);
+	//	PB_ODR &= ~(1 << 5);
+	//	PB_CR1 = (1 << 4) | (1 << 5); // push-pull
 	//display on PD2 PD3
 	PD_DDR = (1 << 3) | (1 << 2); // output mode
-	PB_DDR = (1 << 4);
-	PB_DDR = (1 << 5);
-	PB_ODR &= ~(1 << 4);
-	PB_ODR &= ~(1 << 5);
-	PB_CR1 = (1 << 4) | (1 << 5); // push-pull
-	//	PD_CR2 = (1 << 3) | (1 << 2); // up to 10MHz speed
-	//	PD_CR1 = 0; // push-pull
-	//	PD_CR2 = 0; // up to 10MHz speed
-	//	tm1637Init();
+	PD_CR2 = (1 << 3) | (1 << 2); // up to 10MHz speed
+	PD_CR1 = 0; // push-pull
+	PD_CR2 = 0; // up to 10MHz speed
+	tm1637Init();
 
 	InitializeUART();
 	UARTPrintF("uart initialised \n\r");
 	InitializeI2C();
 	delay(200);
-	//	UARTPrintF("testing 0 \n\r");
+	UARTPrintF("testing 0 \n\r");
 	initMPU6050();
 	delay(200);
 
 
-	//	UARTPrintF("testing 1 \n\r");
+	UARTPrintF("testing 1 \n\r");
 	while (1) {
 		objTemp = getMPU6050();
 		//		UARTPrintF("testing 1 \n\r");
@@ -509,6 +511,7 @@ int main () {
 
 
 		tm1637DisplayDecimal(utemp, 1); // eg 37:12
+		//		tm1637DisplayDecimal(88, 1); // eg 37:12
 
 
 		delayTenMicro();

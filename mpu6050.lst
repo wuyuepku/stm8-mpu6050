@@ -1,7 +1,7 @@
                                       1 ;--------------------------------------------------------
                                       2 ; File Created by SDCC : free open source ANSI-C Compiler
-                                      3 ; Version 3.4.0 #8981 (Jul 11 2014) (Linux)
-                                      4 ; This file was generated Mon Aug 14 15:17:43 2017
+                                      3 ; Version 3.4.0 #8981 (Jul  5 2014) (Linux)
+                                      4 ; This file was generated Tue Aug 15 10:20:35 2017
                                       5 ;--------------------------------------------------------
                                       6 	.module mpu6050
                                       7 	.optsdcc -mstm8
@@ -128,7 +128,7 @@
                                     128 	.area HOME
                                     129 	.area HOME
       000080                        130 __sdcc_program_startup:
-      000080 CCr04rA4         [ 2]  131 	jp	_main
+      000080 CCr04rBC         [ 2]  131 	jp	_main
                                     132 ;	return from main will return to caller
                                     133 ;--------------------------------------------------------
                                     134 ; code
@@ -691,7 +691,7 @@
       000295 96               [ 1]  691 	ldw	x, sp
       000296 5C               [ 2]  692 	incw	x
       000297 1F 12            [ 2]  693 	ldw	(0x12, sp), x
-      000299 AEr06r23         [ 2]  694 	ldw	x, #_segmentMap+0
+      000299 AEr06r46         [ 2]  694 	ldw	x, #_segmentMap+0
       00029C 1F 0B            [ 2]  695 	ldw	(0x0b, sp), x
       00029E 90 5F            [ 1]  696 	clrw	y
       0002A0                        697 00106$:
@@ -1046,319 +1046,358 @@
                                    1046 ;	 function getMPU6050
                                    1047 ;	-----------------------------------------
       000471                       1048 _getMPU6050:
-      000471 52 03            [ 2] 1049 	sub	sp, #3
+      000471 52 06            [ 2] 1049 	sub	sp, #6
                                    1050 ;	mpu6050.c: 439: xh = i2c_read_register (MPU6050_ADDR, 0x43);
       000473 4B 43            [ 1] 1051 	push	#0x43
       000475 4B 68            [ 1] 1052 	push	#0x68
       000477 CDr01r95         [ 4] 1053 	call	_i2c_read_register
       00047A 5B 02            [ 2] 1054 	addw	sp, #2
-                                   1055 ;	mpu6050.c: 440: xl = i2c_read_register (MPU6050_ADDR, 0x44);
-      00047C 88               [ 1] 1056 	push	a
-      00047D 4B 44            [ 1] 1057 	push	#0x44
-      00047F 4B 68            [ 1] 1058 	push	#0x68
-      000481 CDr01r95         [ 4] 1059 	call	_i2c_read_register
-      000484 5B 02            [ 2] 1060 	addw	sp, #2
-      000486 6B 02            [ 1] 1061 	ld	(0x02, sp), a
-      000488 84               [ 1] 1062 	pop	a
-                                   1063 ;	mpu6050.c: 441: xx = xh << 8 | xl;
-      000489 5F               [ 1] 1064 	clrw	x
-      00048A 97               [ 1] 1065 	ld	xl, a
-      00048B 58               [ 2] 1066 	sllw	x
-      00048C 58               [ 2] 1067 	sllw	x
-      00048D 58               [ 2] 1068 	sllw	x
-      00048E 58               [ 2] 1069 	sllw	x
-      00048F 58               [ 2] 1070 	sllw	x
-      000490 58               [ 2] 1071 	sllw	x
-      000491 58               [ 2] 1072 	sllw	x
-      000492 58               [ 2] 1073 	sllw	x
-      000493 7B 01            [ 1] 1074 	ld	a, (0x01, sp)
-      000495 6B 03            [ 1] 1075 	ld	(0x03, sp), a
-      000497 0F 02            [ 1] 1076 	clr	(0x02, sp)
-      000499 9F               [ 1] 1077 	ld	a, xl
-      00049A 1A 03            [ 1] 1078 	or	a, (0x03, sp)
-      00049C 97               [ 1] 1079 	ld	xl, a
-      00049D 9E               [ 1] 1080 	ld	a, xh
-      00049E 1A 02            [ 1] 1081 	or	a, (0x02, sp)
-      0004A0 95               [ 1] 1082 	ld	xh, a
-                                   1083 ;	mpu6050.c: 442: return(xx);
-      0004A1 5B 03            [ 2] 1084 	addw	sp, #3
-      0004A3 81               [ 4] 1085 	ret
-                                   1086 ;	mpu6050.c: 446: int main () {
-                                   1087 ;	-----------------------------------------
-                                   1088 ;	 function main
-                                   1089 ;	-----------------------------------------
-      0004A4                       1090 _main:
-      0004A4 52 16            [ 2] 1091 	sub	sp, #22
-                                   1092 ;	mpu6050.c: 453: InitializeSystemClock();
-      0004A6 CDr00r08         [ 4] 1093 	call	_InitializeSystemClock
-                                   1094 ;	mpu6050.c: 456: PD_DDR = (1 << 3) | (1 << 2); // output mode
-      0004A9 AE 50 11         [ 2] 1095 	ldw	x, #0x5011
-      0004AC A6 0C            [ 1] 1096 	ld	a, #0x0c
-      0004AE F7               [ 1] 1097 	ld	(x), a
-                                   1098 ;	mpu6050.c: 457: PB_DDR = (1 << 4);
-      0004AF AE 50 07         [ 2] 1099 	ldw	x, #0x5007
-      0004B2 A6 10            [ 1] 1100 	ld	a, #0x10
-      0004B4 F7               [ 1] 1101 	ld	(x), a
-                                   1102 ;	mpu6050.c: 458: PB_DDR = (1 << 5);
-      0004B5 AE 50 07         [ 2] 1103 	ldw	x, #0x5007
-      0004B8 A6 20            [ 1] 1104 	ld	a, #0x20
-      0004BA F7               [ 1] 1105 	ld	(x), a
-                                   1106 ;	mpu6050.c: 459: PB_ODR &= ~(1 << 4);
-      0004BB AE 50 05         [ 2] 1107 	ldw	x, #0x5005
-      0004BE F6               [ 1] 1108 	ld	a, (x)
-      0004BF A4 EF            [ 1] 1109 	and	a, #0xef
-      0004C1 F7               [ 1] 1110 	ld	(x), a
-                                   1111 ;	mpu6050.c: 460: PB_ODR &= ~(1 << 5);
-      0004C2 AE 50 05         [ 2] 1112 	ldw	x, #0x5005
-      0004C5 F6               [ 1] 1113 	ld	a, (x)
-      0004C6 A4 DF            [ 1] 1114 	and	a, #0xdf
-      0004C8 F7               [ 1] 1115 	ld	(x), a
-                                   1116 ;	mpu6050.c: 461: PB_CR1 = (1 << 4) | (1 << 5); // push-pull
-      0004C9 AE 50 08         [ 2] 1117 	ldw	x, #0x5008
-      0004CC A6 30            [ 1] 1118 	ld	a, #0x30
-      0004CE F7               [ 1] 1119 	ld	(x), a
-                                   1120 ;	mpu6050.c: 467: InitializeUART();
-      0004CF CDr02r08         [ 4] 1121 	call	_InitializeUART
-                                   1122 ;	mpu6050.c: 468: UARTPrintF("uart initialised \n\r");
-      0004D2 AEr06r34         [ 2] 1123 	ldw	x, #___str_0+0
-      0004D5 89               [ 2] 1124 	pushw	x
-      0004D6 CDr00rE0         [ 4] 1125 	call	_UARTPrintF
-      0004D9 5B 02            [ 2] 1126 	addw	sp, #2
-                                   1127 ;	mpu6050.c: 469: InitializeI2C();
-      0004DB CDr01rD8         [ 4] 1128 	call	_InitializeI2C
-                                   1129 ;	mpu6050.c: 470: delay(200);
-      0004DE 4B C8            [ 1] 1130 	push	#0xc8
-      0004E0 4B 00            [ 1] 1131 	push	#0x00
-      0004E2 CDr00r52         [ 4] 1132 	call	_delay
-      0004E5 5B 02            [ 2] 1133 	addw	sp, #2
-                                   1134 ;	mpu6050.c: 472: initMPU6050();
-      0004E7 CDr03rEA         [ 4] 1135 	call	_initMPU6050
-                                   1136 ;	mpu6050.c: 473: delay(200);
-      0004EA 4B C8            [ 1] 1137 	push	#0xc8
-      0004EC 4B 00            [ 1] 1138 	push	#0x00
-      0004EE CDr00r52         [ 4] 1139 	call	_delay
-      0004F1 5B 02            [ 2] 1140 	addw	sp, #2
-                                   1141 ;	mpu6050.c: 477: while (1) {
-      0004F3                       1142 00114$:
-                                   1143 ;	mpu6050.c: 478: objTemp = getMPU6050();
-      0004F3 CDr04r71         [ 4] 1144 	call	_getMPU6050
-      0004F6 89               [ 2] 1145 	pushw	x
-      0004F7 CDr00r00         [ 4] 1146 	call	___uint2fs
-      0004FA 5B 02            [ 2] 1147 	addw	sp, #2
-      0004FC 1F 07            [ 2] 1148 	ldw	(0x07, sp), x
-      0004FE 17 05            [ 2] 1149 	ldw	(0x05, sp), y
-                                   1150 ;	mpu6050.c: 482: while (objTemp > 1000) {
-      000500 5F               [ 1] 1151 	clrw	x
-      000501 1F 0B            [ 2] 1152 	ldw	(0x0b, sp), x
-      000503                       1153 00101$:
-      000503 5F               [ 1] 1154 	clrw	x
-      000504 89               [ 2] 1155 	pushw	x
-      000505 4B 7A            [ 1] 1156 	push	#0x7a
-      000507 4B 44            [ 1] 1157 	push	#0x44
-      000509 1E 0B            [ 2] 1158 	ldw	x, (0x0b, sp)
-      00050B 89               [ 2] 1159 	pushw	x
-      00050C 1E 0B            [ 2] 1160 	ldw	x, (0x0b, sp)
-      00050E 89               [ 2] 1161 	pushw	x
-      00050F CDr00r00         [ 4] 1162 	call	___fsgt
-      000512 5B 08            [ 2] 1163 	addw	sp, #8
-      000514 4D               [ 1] 1164 	tnz	a
-      000515 27 1C            [ 1] 1165 	jreq	00127$
-                                   1166 ;	mpu6050.c: 483: vierde+=1;
-      000517 1E 0B            [ 2] 1167 	ldw	x, (0x0b, sp)
-      000519 5C               [ 2] 1168 	incw	x
-      00051A 1F 0B            [ 2] 1169 	ldw	(0x0b, sp), x
-                                   1170 ;	mpu6050.c: 484: objTemp-=1000;
-      00051C 5F               [ 1] 1171 	clrw	x
-      00051D 89               [ 2] 1172 	pushw	x
-      00051E 4B 7A            [ 1] 1173 	push	#0x7a
-      000520 4B 44            [ 1] 1174 	push	#0x44
-      000522 1E 0B            [ 2] 1175 	ldw	x, (0x0b, sp)
-      000524 89               [ 2] 1176 	pushw	x
-      000525 1E 0B            [ 2] 1177 	ldw	x, (0x0b, sp)
-      000527 89               [ 2] 1178 	pushw	x
-      000528 CDr00r00         [ 4] 1179 	call	___fssub
-      00052B 5B 08            [ 2] 1180 	addw	sp, #8
-      00052D 1F 07            [ 2] 1181 	ldw	(0x07, sp), x
-      00052F 17 05            [ 2] 1182 	ldw	(0x05, sp), y
-      000531 20 D0            [ 2] 1183 	jra	00101$
-                                   1184 ;	mpu6050.c: 486: while (objTemp > 100) {
-      000533                       1185 00127$:
-      000533 16 0B            [ 2] 1186 	ldw	y, (0x0b, sp)
-      000535 17 0F            [ 2] 1187 	ldw	(0x0f, sp), y
-      000537 5F               [ 1] 1188 	clrw	x
-      000538 1F 01            [ 2] 1189 	ldw	(0x01, sp), x
-      00053A                       1190 00104$:
-      00053A 5F               [ 1] 1191 	clrw	x
-      00053B 89               [ 2] 1192 	pushw	x
-      00053C 4B C8            [ 1] 1193 	push	#0xc8
-      00053E 4B 42            [ 1] 1194 	push	#0x42
-      000540 1E 0B            [ 2] 1195 	ldw	x, (0x0b, sp)
-      000542 89               [ 2] 1196 	pushw	x
-      000543 1E 0B            [ 2] 1197 	ldw	x, (0x0b, sp)
-      000545 89               [ 2] 1198 	pushw	x
-      000546 CDr00r00         [ 4] 1199 	call	___fsgt
-      000549 5B 08            [ 2] 1200 	addw	sp, #8
-      00054B 4D               [ 1] 1201 	tnz	a
-      00054C 27 1C            [ 1] 1202 	jreq	00128$
-                                   1203 ;	mpu6050.c: 487: derde+=1;
-      00054E 1E 01            [ 2] 1204 	ldw	x, (0x01, sp)
-      000550 5C               [ 2] 1205 	incw	x
-      000551 1F 01            [ 2] 1206 	ldw	(0x01, sp), x
-                                   1207 ;	mpu6050.c: 488: objTemp-=100;
-      000553 5F               [ 1] 1208 	clrw	x
-      000554 89               [ 2] 1209 	pushw	x
-      000555 4B C8            [ 1] 1210 	push	#0xc8
-      000557 4B 42            [ 1] 1211 	push	#0x42
-      000559 1E 0B            [ 2] 1212 	ldw	x, (0x0b, sp)
-      00055B 89               [ 2] 1213 	pushw	x
-      00055C 1E 0B            [ 2] 1214 	ldw	x, (0x0b, sp)
-      00055E 89               [ 2] 1215 	pushw	x
-      00055F CDr00r00         [ 4] 1216 	call	___fssub
-      000562 5B 08            [ 2] 1217 	addw	sp, #8
-      000564 1F 07            [ 2] 1218 	ldw	(0x07, sp), x
-      000566 17 05            [ 2] 1219 	ldw	(0x05, sp), y
-      000568 20 D0            [ 2] 1220 	jra	00104$
-                                   1221 ;	mpu6050.c: 490: while (objTemp > 10) {
-      00056A                       1222 00128$:
-      00056A 16 01            [ 2] 1223 	ldw	y, (0x01, sp)
-      00056C 17 15            [ 2] 1224 	ldw	(0x15, sp), y
-      00056E 5F               [ 1] 1225 	clrw	x
-      00056F 1F 03            [ 2] 1226 	ldw	(0x03, sp), x
-      000571                       1227 00107$:
-      000571 5F               [ 1] 1228 	clrw	x
-      000572 89               [ 2] 1229 	pushw	x
-      000573 4B 20            [ 1] 1230 	push	#0x20
-      000575 4B 41            [ 1] 1231 	push	#0x41
-      000577 1E 0B            [ 2] 1232 	ldw	x, (0x0b, sp)
-      000579 89               [ 2] 1233 	pushw	x
-      00057A 1E 0B            [ 2] 1234 	ldw	x, (0x0b, sp)
-      00057C 89               [ 2] 1235 	pushw	x
-      00057D CDr00r00         [ 4] 1236 	call	___fsgt
-      000580 5B 08            [ 2] 1237 	addw	sp, #8
-      000582 4D               [ 1] 1238 	tnz	a
-      000583 27 1C            [ 1] 1239 	jreq	00129$
-                                   1240 ;	mpu6050.c: 491: tweede+=1;
-      000585 1E 03            [ 2] 1241 	ldw	x, (0x03, sp)
-      000587 5C               [ 2] 1242 	incw	x
-      000588 1F 03            [ 2] 1243 	ldw	(0x03, sp), x
-                                   1244 ;	mpu6050.c: 492: objTemp-=10;
-      00058A 5F               [ 1] 1245 	clrw	x
-      00058B 89               [ 2] 1246 	pushw	x
-      00058C 4B 20            [ 1] 1247 	push	#0x20
-      00058E 4B 41            [ 1] 1248 	push	#0x41
-      000590 1E 0B            [ 2] 1249 	ldw	x, (0x0b, sp)
-      000592 89               [ 2] 1250 	pushw	x
-      000593 1E 0B            [ 2] 1251 	ldw	x, (0x0b, sp)
-      000595 89               [ 2] 1252 	pushw	x
-      000596 CDr00r00         [ 4] 1253 	call	___fssub
-      000599 5B 08            [ 2] 1254 	addw	sp, #8
-      00059B 1F 07            [ 2] 1255 	ldw	(0x07, sp), x
-      00059D 17 05            [ 2] 1256 	ldw	(0x05, sp), y
-      00059F 20 D0            [ 2] 1257 	jra	00107$
-                                   1258 ;	mpu6050.c: 494: while (objTemp > 0)
-      0005A1                       1259 00129$:
-      0005A1 16 03            [ 2] 1260 	ldw	y, (0x03, sp)
-      0005A3 17 13            [ 2] 1261 	ldw	(0x13, sp), y
-      0005A5 5F               [ 1] 1262 	clrw	x
-      0005A6 1F 09            [ 2] 1263 	ldw	(0x09, sp), x
-      0005A8                       1264 00110$:
-      0005A8 5F               [ 1] 1265 	clrw	x
-      0005A9 89               [ 2] 1266 	pushw	x
-      0005AA 5F               [ 1] 1267 	clrw	x
-      0005AB 89               [ 2] 1268 	pushw	x
-      0005AC 1E 0B            [ 2] 1269 	ldw	x, (0x0b, sp)
-      0005AE 89               [ 2] 1270 	pushw	x
-      0005AF 1E 0B            [ 2] 1271 	ldw	x, (0x0b, sp)
-      0005B1 89               [ 2] 1272 	pushw	x
-      0005B2 CDr00r00         [ 4] 1273 	call	___fsgt
-      0005B5 5B 08            [ 2] 1274 	addw	sp, #8
-      0005B7 4D               [ 1] 1275 	tnz	a
-      0005B8 27 1C            [ 1] 1276 	jreq	00112$
-                                   1277 ;	mpu6050.c: 496: eerste+=1;
-      0005BA 1E 09            [ 2] 1278 	ldw	x, (0x09, sp)
-      0005BC 5C               [ 2] 1279 	incw	x
-      0005BD 1F 09            [ 2] 1280 	ldw	(0x09, sp), x
-                                   1281 ;	mpu6050.c: 497: objTemp-=1;
-      0005BF 5F               [ 1] 1282 	clrw	x
-      0005C0 89               [ 2] 1283 	pushw	x
-      0005C1 4B 80            [ 1] 1284 	push	#0x80
-      0005C3 4B 3F            [ 1] 1285 	push	#0x3f
-      0005C5 1E 0B            [ 2] 1286 	ldw	x, (0x0b, sp)
-      0005C7 89               [ 2] 1287 	pushw	x
-      0005C8 1E 0B            [ 2] 1288 	ldw	x, (0x0b, sp)
-      0005CA 89               [ 2] 1289 	pushw	x
-      0005CB CDr00r00         [ 4] 1290 	call	___fssub
-      0005CE 5B 08            [ 2] 1291 	addw	sp, #8
-      0005D0 1F 07            [ 2] 1292 	ldw	(0x07, sp), x
-      0005D2 17 05            [ 2] 1293 	ldw	(0x05, sp), y
-      0005D4 20 D2            [ 2] 1294 	jra	00110$
-      0005D6                       1295 00112$:
-                                   1296 ;	mpu6050.c: 508: utemp=vierde*1000+derde*100+tweede*10+eerste;
-      0005D6 1E 0F            [ 2] 1297 	ldw	x, (0x0f, sp)
-      0005D8 89               [ 2] 1298 	pushw	x
-      0005D9 4B E8            [ 1] 1299 	push	#0xe8
-      0005DB 4B 03            [ 1] 1300 	push	#0x03
-      0005DD CDr00r00         [ 4] 1301 	call	__mulint
-      0005E0 5B 04            [ 2] 1302 	addw	sp, #4
-      0005E2 1F 11            [ 2] 1303 	ldw	(0x11, sp), x
-      0005E4 1E 15            [ 2] 1304 	ldw	x, (0x15, sp)
-      0005E6 89               [ 2] 1305 	pushw	x
-      0005E7 4B 64            [ 1] 1306 	push	#0x64
-      0005E9 4B 00            [ 1] 1307 	push	#0x00
-      0005EB CDr00r00         [ 4] 1308 	call	__mulint
-      0005EE 5B 04            [ 2] 1309 	addw	sp, #4
-      0005F0 72 FB 11         [ 2] 1310 	addw	x, (0x11, sp)
-      0005F3 1F 0D            [ 2] 1311 	ldw	(0x0d, sp), x
-      0005F5 1E 13            [ 2] 1312 	ldw	x, (0x13, sp)
-      0005F7 89               [ 2] 1313 	pushw	x
-      0005F8 4B 0A            [ 1] 1314 	push	#0x0a
-      0005FA 4B 00            [ 1] 1315 	push	#0x00
-      0005FC CDr00r00         [ 4] 1316 	call	__mulint
-      0005FF 5B 04            [ 2] 1317 	addw	sp, #4
-      000601 72 FB 0D         [ 2] 1318 	addw	x, (0x0d, sp)
-      000604 72 FB 09         [ 2] 1319 	addw	x, (0x09, sp)
-      000607 90 5F            [ 1] 1320 	clrw	y
-      000609 5D               [ 2] 1321 	tnzw	x
-      00060A 2A 02            [ 1] 1322 	jrpl	00162$
-      00060C 90 5A            [ 2] 1323 	decw	y
-      00060E                       1324 00162$:
-                                   1325 ;	mpu6050.c: 511: tm1637DisplayDecimal(utemp, 1); // eg 37:12
-      00060E 4B 01            [ 1] 1326 	push	#0x01
-      000610 4B 00            [ 1] 1327 	push	#0x00
-      000612 89               [ 2] 1328 	pushw	x
-      000613 90 89            [ 2] 1329 	pushw	y
-      000615 CDr02r88         [ 4] 1330 	call	_tm1637DisplayDecimal
-      000618 5B 06            [ 2] 1331 	addw	sp, #6
-                                   1332 ;	mpu6050.c: 514: delayTenMicro();
-      00061A CDr00r00         [ 4] 1333 	call	_delayTenMicro
-      00061D CCr04rF3         [ 2] 1334 	jp	00114$
-      000620 5B 16            [ 2] 1335 	addw	sp, #22
-      000622 81               [ 4] 1336 	ret
-                                   1337 	.area CODE
-      000623                       1338 _segmentMap:
-      000623 3F                    1339 	.db #0x3F	;  63
-      000624 06                    1340 	.db #0x06	;  6
-      000625 5B                    1341 	.db #0x5B	;  91
-      000626 4F                    1342 	.db #0x4F	;  79	'O'
-      000627 66                    1343 	.db #0x66	;  102	'f'
-      000628 6D                    1344 	.db #0x6D	;  109	'm'
-      000629 7D                    1345 	.db #0x7D	;  125
-      00062A 07                    1346 	.db #0x07	;  7
-      00062B 7F                    1347 	.db #0x7F	;  127
-      00062C 6F                    1348 	.db #0x6F	;  111	'o'
-      00062D 77                    1349 	.db #0x77	;  119	'w'
-      00062E 7C                    1350 	.db #0x7C	;  124
-      00062F 39                    1351 	.db #0x39	;  57	'9'
-      000630 5E                    1352 	.db #0x5E	;  94
-      000631 79                    1353 	.db #0x79	;  121	'y'
-      000632 71                    1354 	.db #0x71	;  113	'q'
-      000633 00                    1355 	.db #0x00	;  0
-      000634                       1356 ___str_0:
-      000634 75 61 72 74 20 69 6E  1357 	.ascii "uart initialised "
+      00047C 6B 02            [ 1] 1055 	ld	(0x02, sp), a
+                                   1056 ;	mpu6050.c: 440: UARTPrintF("read 1 \n\r");
+      00047E AEr06r57         [ 2] 1057 	ldw	x, #___str_0+0
+      000481 89               [ 2] 1058 	pushw	x
+      000482 CDr00rE0         [ 4] 1059 	call	_UARTPrintF
+      000485 5B 02            [ 2] 1060 	addw	sp, #2
+                                   1061 ;	mpu6050.c: 441: xl = i2c_read_register (MPU6050_ADDR, 0x44);
+      000487 4B 44            [ 1] 1062 	push	#0x44
+      000489 4B 68            [ 1] 1063 	push	#0x68
+      00048B CDr01r95         [ 4] 1064 	call	_i2c_read_register
+      00048E 5B 02            [ 2] 1065 	addw	sp, #2
+      000490 6B 01            [ 1] 1066 	ld	(0x01, sp), a
+                                   1067 ;	mpu6050.c: 442: UARTPrintF("read 2 \n\r");
+      000492 AEr06r61         [ 2] 1068 	ldw	x, #___str_1+0
+      000495 89               [ 2] 1069 	pushw	x
+      000496 CDr00rE0         [ 4] 1070 	call	_UARTPrintF
+      000499 5B 02            [ 2] 1071 	addw	sp, #2
+                                   1072 ;	mpu6050.c: 443: xx = xh << 8 | xl;
+      00049B 7B 02            [ 1] 1073 	ld	a, (0x02, sp)
+      00049D 6B 06            [ 1] 1074 	ld	(0x06, sp), a
+      00049F 0F 05            [ 1] 1075 	clr	(0x05, sp)
+      0004A1 1E 05            [ 2] 1076 	ldw	x, (0x05, sp)
+      0004A3 58               [ 2] 1077 	sllw	x
+      0004A4 58               [ 2] 1078 	sllw	x
+      0004A5 58               [ 2] 1079 	sllw	x
+      0004A6 58               [ 2] 1080 	sllw	x
+      0004A7 58               [ 2] 1081 	sllw	x
+      0004A8 58               [ 2] 1082 	sllw	x
+      0004A9 58               [ 2] 1083 	sllw	x
+      0004AA 58               [ 2] 1084 	sllw	x
+      0004AB 7B 01            [ 1] 1085 	ld	a, (0x01, sp)
+      0004AD 6B 04            [ 1] 1086 	ld	(0x04, sp), a
+      0004AF 0F 03            [ 1] 1087 	clr	(0x03, sp)
+      0004B1 9F               [ 1] 1088 	ld	a, xl
+      0004B2 1A 04            [ 1] 1089 	or	a, (0x04, sp)
+      0004B4 97               [ 1] 1090 	ld	xl, a
+      0004B5 9E               [ 1] 1091 	ld	a, xh
+      0004B6 1A 03            [ 1] 1092 	or	a, (0x03, sp)
+      0004B8 95               [ 1] 1093 	ld	xh, a
+                                   1094 ;	mpu6050.c: 444: return(xx);
+      0004B9 5B 06            [ 2] 1095 	addw	sp, #6
+      0004BB 81               [ 4] 1096 	ret
+                                   1097 ;	mpu6050.c: 448: int main () {
+                                   1098 ;	-----------------------------------------
+                                   1099 ;	 function main
+                                   1100 ;	-----------------------------------------
+      0004BC                       1101 _main:
+      0004BC 52 16            [ 2] 1102 	sub	sp, #22
+                                   1103 ;	mpu6050.c: 455: InitializeSystemClock();
+      0004BE CDr00r08         [ 4] 1104 	call	_InitializeSystemClock
+                                   1105 ;	mpu6050.c: 458: PD_DDR = (1 << 3) | (1 << 2); // output mode
+      0004C1 AE 50 11         [ 2] 1106 	ldw	x, #0x5011
+      0004C4 A6 0C            [ 1] 1107 	ld	a, #0x0c
+      0004C6 F7               [ 1] 1108 	ld	(x), a
+                                   1109 ;	mpu6050.c: 459: PB_DDR = (0 << 4);
+      0004C7 AE 50 07         [ 2] 1110 	ldw	x, #0x5007
+      0004CA 7F               [ 1] 1111 	clr	(x)
+                                   1112 ;	mpu6050.c: 460: PB_DDR = (0 << 5);
+      0004CB AE 50 07         [ 2] 1113 	ldw	x, #0x5007
+      0004CE 7F               [ 1] 1114 	clr	(x)
+                                   1115 ;	mpu6050.c: 464: PD_CR2 = (1 << 3) | (1 << 2); // up to 10MHz speed
+      0004CF AE 50 13         [ 2] 1116 	ldw	x, #0x5013
+      0004D2 A6 0C            [ 1] 1117 	ld	a, #0x0c
+      0004D4 F7               [ 1] 1118 	ld	(x), a
+                                   1119 ;	mpu6050.c: 465: PD_CR1 = 0; // push-pull
+      0004D5 AE 50 12         [ 2] 1120 	ldw	x, #0x5012
+      0004D8 7F               [ 1] 1121 	clr	(x)
+                                   1122 ;	mpu6050.c: 466: PD_CR2 = 0; // up to 10MHz speed
+      0004D9 AE 50 13         [ 2] 1123 	ldw	x, #0x5013
+      0004DC 7F               [ 1] 1124 	clr	(x)
+                                   1125 ;	mpu6050.c: 467: tm1637Init();
+      0004DD CDr02r81         [ 4] 1126 	call	_tm1637Init
+                                   1127 ;	mpu6050.c: 469: InitializeUART();
+      0004E0 CDr02r08         [ 4] 1128 	call	_InitializeUART
+                                   1129 ;	mpu6050.c: 470: UARTPrintF("uart initialised \n\r");
+      0004E3 AEr06r6B         [ 2] 1130 	ldw	x, #___str_2+0
+      0004E6 89               [ 2] 1131 	pushw	x
+      0004E7 CDr00rE0         [ 4] 1132 	call	_UARTPrintF
+      0004EA 5B 02            [ 2] 1133 	addw	sp, #2
+                                   1134 ;	mpu6050.c: 471: InitializeI2C();
+      0004EC CDr01rD8         [ 4] 1135 	call	_InitializeI2C
+                                   1136 ;	mpu6050.c: 472: delay(200);
+      0004EF 4B C8            [ 1] 1137 	push	#0xc8
+      0004F1 4B 00            [ 1] 1138 	push	#0x00
+      0004F3 CDr00r52         [ 4] 1139 	call	_delay
+      0004F6 5B 02            [ 2] 1140 	addw	sp, #2
+                                   1141 ;	mpu6050.c: 473: UARTPrintF("testing 0 \n\r");
+      0004F8 AEr06r7F         [ 2] 1142 	ldw	x, #___str_3+0
+      0004FB 89               [ 2] 1143 	pushw	x
+      0004FC CDr00rE0         [ 4] 1144 	call	_UARTPrintF
+      0004FF 5B 02            [ 2] 1145 	addw	sp, #2
+                                   1146 ;	mpu6050.c: 474: initMPU6050();
+      000501 CDr03rEA         [ 4] 1147 	call	_initMPU6050
+                                   1148 ;	mpu6050.c: 475: delay(200);
+      000504 4B C8            [ 1] 1149 	push	#0xc8
+      000506 4B 00            [ 1] 1150 	push	#0x00
+      000508 CDr00r52         [ 4] 1151 	call	_delay
+      00050B 5B 02            [ 2] 1152 	addw	sp, #2
+                                   1153 ;	mpu6050.c: 478: UARTPrintF("testing 1 \n\r");
+      00050D AEr06r8C         [ 2] 1154 	ldw	x, #___str_4+0
+      000510 89               [ 2] 1155 	pushw	x
+      000511 CDr00rE0         [ 4] 1156 	call	_UARTPrintF
+      000514 5B 02            [ 2] 1157 	addw	sp, #2
+                                   1158 ;	mpu6050.c: 479: while (1) {
+      000516                       1159 00114$:
+                                   1160 ;	mpu6050.c: 480: objTemp = getMPU6050();
+      000516 CDr04r71         [ 4] 1161 	call	_getMPU6050
+      000519 89               [ 2] 1162 	pushw	x
+      00051A CDr00r00         [ 4] 1163 	call	___uint2fs
+      00051D 5B 02            [ 2] 1164 	addw	sp, #2
+      00051F 1F 05            [ 2] 1165 	ldw	(0x05, sp), x
+      000521 17 03            [ 2] 1166 	ldw	(0x03, sp), y
+                                   1167 ;	mpu6050.c: 484: while (objTemp > 1000) {
+      000523 5F               [ 1] 1168 	clrw	x
+      000524 1F 0B            [ 2] 1169 	ldw	(0x0b, sp), x
+      000526                       1170 00101$:
+      000526 5F               [ 1] 1171 	clrw	x
+      000527 89               [ 2] 1172 	pushw	x
+      000528 4B 7A            [ 1] 1173 	push	#0x7a
+      00052A 4B 44            [ 1] 1174 	push	#0x44
+      00052C 1E 09            [ 2] 1175 	ldw	x, (0x09, sp)
+      00052E 89               [ 2] 1176 	pushw	x
+      00052F 1E 09            [ 2] 1177 	ldw	x, (0x09, sp)
+      000531 89               [ 2] 1178 	pushw	x
+      000532 CDr00r00         [ 4] 1179 	call	___fsgt
+      000535 5B 08            [ 2] 1180 	addw	sp, #8
+      000537 4D               [ 1] 1181 	tnz	a
+      000538 27 1C            [ 1] 1182 	jreq	00127$
+                                   1183 ;	mpu6050.c: 485: vierde+=1;
+      00053A 1E 0B            [ 2] 1184 	ldw	x, (0x0b, sp)
+      00053C 5C               [ 2] 1185 	incw	x
+      00053D 1F 0B            [ 2] 1186 	ldw	(0x0b, sp), x
+                                   1187 ;	mpu6050.c: 486: objTemp-=1000;
+      00053F 5F               [ 1] 1188 	clrw	x
+      000540 89               [ 2] 1189 	pushw	x
+      000541 4B 7A            [ 1] 1190 	push	#0x7a
+      000543 4B 44            [ 1] 1191 	push	#0x44
+      000545 1E 09            [ 2] 1192 	ldw	x, (0x09, sp)
+      000547 89               [ 2] 1193 	pushw	x
+      000548 1E 09            [ 2] 1194 	ldw	x, (0x09, sp)
+      00054A 89               [ 2] 1195 	pushw	x
+      00054B CDr00r00         [ 4] 1196 	call	___fssub
+      00054E 5B 08            [ 2] 1197 	addw	sp, #8
+      000550 1F 05            [ 2] 1198 	ldw	(0x05, sp), x
+      000552 17 03            [ 2] 1199 	ldw	(0x03, sp), y
+      000554 20 D0            [ 2] 1200 	jra	00101$
+                                   1201 ;	mpu6050.c: 488: while (objTemp > 100) {
+      000556                       1202 00127$:
+      000556 16 0B            [ 2] 1203 	ldw	y, (0x0b, sp)
+      000558 17 13            [ 2] 1204 	ldw	(0x13, sp), y
+      00055A 5F               [ 1] 1205 	clrw	x
+      00055B 1F 07            [ 2] 1206 	ldw	(0x07, sp), x
+      00055D                       1207 00104$:
+      00055D 5F               [ 1] 1208 	clrw	x
+      00055E 89               [ 2] 1209 	pushw	x
+      00055F 4B C8            [ 1] 1210 	push	#0xc8
+      000561 4B 42            [ 1] 1211 	push	#0x42
+      000563 1E 09            [ 2] 1212 	ldw	x, (0x09, sp)
+      000565 89               [ 2] 1213 	pushw	x
+      000566 1E 09            [ 2] 1214 	ldw	x, (0x09, sp)
+      000568 89               [ 2] 1215 	pushw	x
+      000569 CDr00r00         [ 4] 1216 	call	___fsgt
+      00056C 5B 08            [ 2] 1217 	addw	sp, #8
+      00056E 4D               [ 1] 1218 	tnz	a
+      00056F 27 1C            [ 1] 1219 	jreq	00128$
+                                   1220 ;	mpu6050.c: 489: derde+=1;
+      000571 1E 07            [ 2] 1221 	ldw	x, (0x07, sp)
+      000573 5C               [ 2] 1222 	incw	x
+      000574 1F 07            [ 2] 1223 	ldw	(0x07, sp), x
+                                   1224 ;	mpu6050.c: 490: objTemp-=100;
+      000576 5F               [ 1] 1225 	clrw	x
+      000577 89               [ 2] 1226 	pushw	x
+      000578 4B C8            [ 1] 1227 	push	#0xc8
+      00057A 4B 42            [ 1] 1228 	push	#0x42
+      00057C 1E 09            [ 2] 1229 	ldw	x, (0x09, sp)
+      00057E 89               [ 2] 1230 	pushw	x
+      00057F 1E 09            [ 2] 1231 	ldw	x, (0x09, sp)
+      000581 89               [ 2] 1232 	pushw	x
+      000582 CDr00r00         [ 4] 1233 	call	___fssub
+      000585 5B 08            [ 2] 1234 	addw	sp, #8
+      000587 1F 05            [ 2] 1235 	ldw	(0x05, sp), x
+      000589 17 03            [ 2] 1236 	ldw	(0x03, sp), y
+      00058B 20 D0            [ 2] 1237 	jra	00104$
+                                   1238 ;	mpu6050.c: 492: while (objTemp > 10) {
+      00058D                       1239 00128$:
+      00058D 16 07            [ 2] 1240 	ldw	y, (0x07, sp)
+      00058F 17 11            [ 2] 1241 	ldw	(0x11, sp), y
+      000591 5F               [ 1] 1242 	clrw	x
+      000592 1F 09            [ 2] 1243 	ldw	(0x09, sp), x
+      000594                       1244 00107$:
+      000594 5F               [ 1] 1245 	clrw	x
+      000595 89               [ 2] 1246 	pushw	x
+      000596 4B 20            [ 1] 1247 	push	#0x20
+      000598 4B 41            [ 1] 1248 	push	#0x41
+      00059A 1E 09            [ 2] 1249 	ldw	x, (0x09, sp)
+      00059C 89               [ 2] 1250 	pushw	x
+      00059D 1E 09            [ 2] 1251 	ldw	x, (0x09, sp)
+      00059F 89               [ 2] 1252 	pushw	x
+      0005A0 CDr00r00         [ 4] 1253 	call	___fsgt
+      0005A3 5B 08            [ 2] 1254 	addw	sp, #8
+      0005A5 4D               [ 1] 1255 	tnz	a
+      0005A6 27 1C            [ 1] 1256 	jreq	00129$
+                                   1257 ;	mpu6050.c: 493: tweede+=1;
+      0005A8 1E 09            [ 2] 1258 	ldw	x, (0x09, sp)
+      0005AA 5C               [ 2] 1259 	incw	x
+      0005AB 1F 09            [ 2] 1260 	ldw	(0x09, sp), x
+                                   1261 ;	mpu6050.c: 494: objTemp-=10;
+      0005AD 5F               [ 1] 1262 	clrw	x
+      0005AE 89               [ 2] 1263 	pushw	x
+      0005AF 4B 20            [ 1] 1264 	push	#0x20
+      0005B1 4B 41            [ 1] 1265 	push	#0x41
+      0005B3 1E 09            [ 2] 1266 	ldw	x, (0x09, sp)
+      0005B5 89               [ 2] 1267 	pushw	x
+      0005B6 1E 09            [ 2] 1268 	ldw	x, (0x09, sp)
+      0005B8 89               [ 2] 1269 	pushw	x
+      0005B9 CDr00r00         [ 4] 1270 	call	___fssub
+      0005BC 5B 08            [ 2] 1271 	addw	sp, #8
+      0005BE 1F 05            [ 2] 1272 	ldw	(0x05, sp), x
+      0005C0 17 03            [ 2] 1273 	ldw	(0x03, sp), y
+      0005C2 20 D0            [ 2] 1274 	jra	00107$
+                                   1275 ;	mpu6050.c: 496: while (objTemp > 0)
+      0005C4                       1276 00129$:
+      0005C4 16 09            [ 2] 1277 	ldw	y, (0x09, sp)
+      0005C6 17 0F            [ 2] 1278 	ldw	(0x0f, sp), y
+      0005C8 5F               [ 1] 1279 	clrw	x
+      0005C9 1F 01            [ 2] 1280 	ldw	(0x01, sp), x
+      0005CB                       1281 00110$:
+      0005CB 5F               [ 1] 1282 	clrw	x
+      0005CC 89               [ 2] 1283 	pushw	x
+      0005CD 5F               [ 1] 1284 	clrw	x
+      0005CE 89               [ 2] 1285 	pushw	x
+      0005CF 1E 09            [ 2] 1286 	ldw	x, (0x09, sp)
+      0005D1 89               [ 2] 1287 	pushw	x
+      0005D2 1E 09            [ 2] 1288 	ldw	x, (0x09, sp)
+      0005D4 89               [ 2] 1289 	pushw	x
+      0005D5 CDr00r00         [ 4] 1290 	call	___fsgt
+      0005D8 5B 08            [ 2] 1291 	addw	sp, #8
+      0005DA 4D               [ 1] 1292 	tnz	a
+      0005DB 27 1C            [ 1] 1293 	jreq	00112$
+                                   1294 ;	mpu6050.c: 498: eerste+=1;
+      0005DD 1E 01            [ 2] 1295 	ldw	x, (0x01, sp)
+      0005DF 5C               [ 2] 1296 	incw	x
+      0005E0 1F 01            [ 2] 1297 	ldw	(0x01, sp), x
+                                   1298 ;	mpu6050.c: 499: objTemp-=1;
+      0005E2 5F               [ 1] 1299 	clrw	x
+      0005E3 89               [ 2] 1300 	pushw	x
+      0005E4 4B 80            [ 1] 1301 	push	#0x80
+      0005E6 4B 3F            [ 1] 1302 	push	#0x3f
+      0005E8 1E 09            [ 2] 1303 	ldw	x, (0x09, sp)
+      0005EA 89               [ 2] 1304 	pushw	x
+      0005EB 1E 09            [ 2] 1305 	ldw	x, (0x09, sp)
+      0005ED 89               [ 2] 1306 	pushw	x
+      0005EE CDr00r00         [ 4] 1307 	call	___fssub
+      0005F1 5B 08            [ 2] 1308 	addw	sp, #8
+      0005F3 1F 05            [ 2] 1309 	ldw	(0x05, sp), x
+      0005F5 17 03            [ 2] 1310 	ldw	(0x03, sp), y
+      0005F7 20 D2            [ 2] 1311 	jra	00110$
+      0005F9                       1312 00112$:
+                                   1313 ;	mpu6050.c: 510: utemp=vierde*1000+derde*100+tweede*10+eerste;
+      0005F9 1E 13            [ 2] 1314 	ldw	x, (0x13, sp)
+      0005FB 89               [ 2] 1315 	pushw	x
+      0005FC 4B E8            [ 1] 1316 	push	#0xe8
+      0005FE 4B 03            [ 1] 1317 	push	#0x03
+      000600 CDr00r00         [ 4] 1318 	call	__mulint
+      000603 5B 04            [ 2] 1319 	addw	sp, #4
+      000605 1F 0D            [ 2] 1320 	ldw	(0x0d, sp), x
+      000607 1E 11            [ 2] 1321 	ldw	x, (0x11, sp)
+      000609 89               [ 2] 1322 	pushw	x
+      00060A 4B 64            [ 1] 1323 	push	#0x64
+      00060C 4B 00            [ 1] 1324 	push	#0x00
+      00060E CDr00r00         [ 4] 1325 	call	__mulint
+      000611 5B 04            [ 2] 1326 	addw	sp, #4
+      000613 72 FB 0D         [ 2] 1327 	addw	x, (0x0d, sp)
+      000616 1F 15            [ 2] 1328 	ldw	(0x15, sp), x
+      000618 1E 0F            [ 2] 1329 	ldw	x, (0x0f, sp)
+      00061A 89               [ 2] 1330 	pushw	x
+      00061B 4B 0A            [ 1] 1331 	push	#0x0a
+      00061D 4B 00            [ 1] 1332 	push	#0x00
+      00061F CDr00r00         [ 4] 1333 	call	__mulint
+      000622 5B 04            [ 2] 1334 	addw	sp, #4
+      000624 72 FB 15         [ 2] 1335 	addw	x, (0x15, sp)
+      000627 72 FB 01         [ 2] 1336 	addw	x, (0x01, sp)
+      00062A 90 5F            [ 1] 1337 	clrw	y
+      00062C 5D               [ 2] 1338 	tnzw	x
+      00062D 2A 02            [ 1] 1339 	jrpl	00162$
+      00062F 90 5A            [ 2] 1340 	decw	y
+      000631                       1341 00162$:
+                                   1342 ;	mpu6050.c: 513: tm1637DisplayDecimal(utemp, 1); // eg 37:12
+      000631 4B 01            [ 1] 1343 	push	#0x01
+      000633 4B 00            [ 1] 1344 	push	#0x00
+      000635 89               [ 2] 1345 	pushw	x
+      000636 90 89            [ 2] 1346 	pushw	y
+      000638 CDr02r88         [ 4] 1347 	call	_tm1637DisplayDecimal
+      00063B 5B 06            [ 2] 1348 	addw	sp, #6
+                                   1349 ;	mpu6050.c: 517: delayTenMicro();
+      00063D CDr00r00         [ 4] 1350 	call	_delayTenMicro
+      000640 CCr05r16         [ 2] 1351 	jp	00114$
+      000643 5B 16            [ 2] 1352 	addw	sp, #22
+      000645 81               [ 4] 1353 	ret
+                                   1354 	.area CODE
+      000646                       1355 _segmentMap:
+      000646 3F                    1356 	.db #0x3F	;  63
+      000647 06                    1357 	.db #0x06	;  6
+      000648 5B                    1358 	.db #0x5B	;  91
+      000649 4F                    1359 	.db #0x4F	;  79	'O'
+      00064A 66                    1360 	.db #0x66	;  102	'f'
+      00064B 6D                    1361 	.db #0x6D	;  109	'm'
+      00064C 7D                    1362 	.db #0x7D	;  125
+      00064D 07                    1363 	.db #0x07	;  7
+      00064E 7F                    1364 	.db #0x7F	;  127
+      00064F 6F                    1365 	.db #0x6F	;  111	'o'
+      000650 77                    1366 	.db #0x77	;  119	'w'
+      000651 7C                    1367 	.db #0x7C	;  124
+      000652 39                    1368 	.db #0x39	;  57	'9'
+      000653 5E                    1369 	.db #0x5E	;  94
+      000654 79                    1370 	.db #0x79	;  121	'y'
+      000655 71                    1371 	.db #0x71	;  113	'q'
+      000656 00                    1372 	.db #0x00	;  0
+      000657                       1373 ___str_0:
+      000657 72 65 61 64 20 31 20  1374 	.ascii "read 1 "
+      00065E 0A                    1375 	.db 0x0A
+      00065F 0D                    1376 	.db 0x0D
+      000660 00                    1377 	.db 0x00
+      000661                       1378 ___str_1:
+      000661 72 65 61 64 20 32 20  1379 	.ascii "read 2 "
+      000668 0A                    1380 	.db 0x0A
+      000669 0D                    1381 	.db 0x0D
+      00066A 00                    1382 	.db 0x00
+      00066B                       1383 ___str_2:
+      00066B 75 61 72 74 20 69 6E  1384 	.ascii "uart initialised "
              69 74 69 61 6C 69 73
              65 64 20
-      000645 0A                    1358 	.db 0x0A
-      000646 0D                    1359 	.db 0x0D
-      000647 00                    1360 	.db 0x00
-                                   1361 	.area INITIALIZER
-                                   1362 	.area CABS (ABS)
+      00067C 0A                    1385 	.db 0x0A
+      00067D 0D                    1386 	.db 0x0D
+      00067E 00                    1387 	.db 0x00
+      00067F                       1388 ___str_3:
+      00067F 74 65 73 74 69 6E 67  1389 	.ascii "testing 0 "
+             20 30 20
+      000689 0A                    1390 	.db 0x0A
+      00068A 0D                    1391 	.db 0x0D
+      00068B 00                    1392 	.db 0x00
+      00068C                       1393 ___str_4:
+      00068C 74 65 73 74 69 6E 67  1394 	.ascii "testing 1 "
+             20 31 20
+      000696 0A                    1395 	.db 0x0A
+      000697 0D                    1396 	.db 0x0D
+      000698 00                    1397 	.db 0x00
+                                   1398 	.area INITIALIZER
+                                   1399 	.area CABS (ABS)

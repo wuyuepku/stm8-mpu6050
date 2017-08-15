@@ -44,12 +44,12 @@ CABS                                00000000    00000000 =           0. bytes (A
      00000083  l_HOME                          
      00000100  l_IRAM                          
      00000100  l_SSEG                          
-     00000C4B  l_CODE                          
+     00000C9C  l_CODE                          
      00008000  s_HOME                          
      00008083  s_GSINIT                        
      0000809D  s_GSFINAL                       
      000080A0  s_CODE                          
-     00008CEB  s_INITIALIZER                   
+     00008D3C  s_INITIALIZER                   
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
@@ -112,7 +112,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                000080A0    00000C4B =        3147. bytes (REL,CON)
+CODE                                000080A0    00000C9C =        3228. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -143,14 +143,14 @@ CODE                                000080A0    00000C4B =        3147. bytes (R
      00008482  __tm1637DioLow                     mpu6050
      0000848A  _initMPU6050                       mpu6050
      00008511  _getMPU6050                        mpu6050
-     00008544  _main                              mpu6050
-     000086C3  _segmentMap                        mpu6050
-     000086E8  ___fssub                           _fssub
-     00008710  ___fsgt                            _fsgt
-     00008817  __mulint                           _mulint
-     0000886D  ___fsadd                           _fsadd
-     00008BF9  ___uint2fs                         _uint2fs
-     00008C05  ___ulong2fs                        _ulong2fs
+     0000855C  _main                              mpu6050
+     000086E6  _segmentMap                        mpu6050
+     00008739  ___fssub                           _fssub
+     00008761  ___fsgt                            _fsgt
+     00008868  __mulint                           _mulint
+     000088BE  ___fsadd                           _fsadd
+     00008C4A  ___uint2fs                         _uint2fs
+     00008C56  ___ulong2fs                        _ulong2fs
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
 
