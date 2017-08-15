@@ -12,6 +12,9 @@ CABS                                00000000    00000000 =           0. bytes (A
      00000000  l_BSEG_BYTES                    
      00000000  l_CABS                          
      00000000  l_DABS                          
+     00000000  l_DATA                          
+     00000000  l_INITIALIZED                   
+     00000000  l_INITIALIZER                   
      00000000  l_ISEG                          
      00000000  l_OSEG                          
      00000000  l_REG_BANK_0                    
@@ -26,8 +29,7 @@ CABS                                00000000    00000000 =           0. bytes (A
      00000000  s_REG_BANK_0                    
      00000000  s_SSEG                          
      00000001  s_DATA                          
-     00000002  l_INITIALIZED                   
-     00000002  l_INITIALIZER                   
+     00000001  s_INITIALIZED                   
      00000003  l_GSFINAL                       
      00000008  s_REG_BANK_1                    
      00000010  s_REG_BANK_2                    
@@ -38,18 +40,16 @@ CABS                                00000000    00000000 =           0. bytes (A
      0000001A  l_GSINIT                        
      00000020  s_BSEG_BYTES                    
      00000020  s__CODE                         
-     00000024  l_DATA                          
-     00000025  s_INITIALIZED                   
      00000080  l_DSEG                          
      00000083  l_HOME                          
      00000100  l_IRAM                          
      00000100  l_SSEG                          
-     0000108F  l_CODE                          
+     00000C4B  l_CODE                          
      00008000  s_HOME                          
      00008083  s_GSINIT                        
      0000809D  s_GSFINAL                       
      000080A0  s_CODE                          
-     0000912F  s_INITIALIZER                   
+     00008CEB  s_INITIALIZER                   
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
@@ -60,7 +60,7 @@ Area                                    Addr        Size        Decimal Bytes (A
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000000  .__.ABS.                           _mullong
+     00000000  .__.ABS.                           _ulong2fs
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 Hexadecimal  [32-Bits]
@@ -85,7 +85,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-DATA                                00000001    00000024 =          36. bytes (REL,CON)
+HOME                                00008000    00000083 =         131. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -94,7 +94,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-INITIALIZED                         00000025    00000002 =           2. bytes (REL,CON)
+GSINIT                              00008083    0000001A =          26. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -103,7 +103,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-HOME                                00008000    00000083 =         131. bytes (REL,CON)
+GSFINAL                             0000809D    00000003 =           3. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -112,25 +112,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-GSINIT                              00008083    0000001A =          26. bytes (REL,CON)
-
-      Value  Global                              Global Defined In Module
-      -----  --------------------------------   ------------------------
-ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
-Hexadecimal  [32-Bits]
-
-Area                                    Addr        Size        Decimal Bytes (Attributes)
---------------------------------        ----        ----        ------- ----- ------------
-GSFINAL                             0000809D    00000003 =           3. bytes (REL,CON)
-
-      Value  Global                              Global Defined In Module
-      -----  --------------------------------   ------------------------
-ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
-Hexadecimal  [32-Bits]
-
-Area                                    Addr        Size        Decimal Bytes (Attributes)
---------------------------------        ----        ----        ------- ----- ------------
-CODE                                000080A0    0000108F =        4239. bytes (REL,CON)
+CODE                                000080A0    00000C4B =        3147. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -146,43 +128,31 @@ CODE                                000080A0    0000108F =        4239. bytes (R
      000081D9  _i2c_set_start_ack                 mpu6050
      000081E7  _print_byte_hex                    mpu6050
      00008235  _i2c_read_register                 mpu6050
-     00008277  _InitializeI2C                     mpu6050
-     000082A7  _InitializeUART                    mpu6050
-     00008320  _tm1637Init                        mpu6050
-     00008327  _tm1637DisplayDecimal              mpu6050
-     000083C5  _tm1637SetBrightness               mpu6050
-     000083D7  __tm1637Start                      mpu6050
-     000083E9  __tm1637Stop                       mpu6050
-     00008410  __tm1637ReadResult                 mpu6050
-     0000842B  __tm1637WriteByte                  mpu6050
-     00008469  __tm1637ClkHigh                    mpu6050
-     00008471  __tm1637ClkLow                     mpu6050
-     00008479  __tm1637DioHigh                    mpu6050
-     00008481  __tm1637DioLow                     mpu6050
-     00008489  _readBMP280                        mpu6050
-     00008501  _initBMP280                        mpu6050
-     000086BD  _getBMP280Temperature              mpu6050
-     000087FA  _getBMP280Humidity                 mpu6050
-     000087FB  _main                              mpu6050
-     00008973  _segmentMap                        mpu6050
-     00008998  ___fssub                           _fssub
-     000089C0  ___slong2fs                        _slong2fs
-     000089F7  ___ulong2fs                        _ulong2fs
-     00008ADD  ___fsgt                            _fsgt
-     00008BE4  __mulint                           _mulint
-     00008C3A  ___fsadd                           _fsadd
-     00008FC6  __mullong                          _mullong
+     00008278  _InitializeI2C                     mpu6050
+     000082A8  _InitializeUART                    mpu6050
+     00008321  _tm1637Init                        mpu6050
+     00008328  _tm1637DisplayDecimal              mpu6050
+     000083C6  _tm1637SetBrightness               mpu6050
+     000083D8  __tm1637Start                      mpu6050
+     000083EA  __tm1637Stop                       mpu6050
+     00008411  __tm1637ReadResult                 mpu6050
+     0000842C  __tm1637WriteByte                  mpu6050
+     0000846A  __tm1637ClkHigh                    mpu6050
+     00008472  __tm1637ClkLow                     mpu6050
+     0000847A  __tm1637DioHigh                    mpu6050
+     00008482  __tm1637DioLow                     mpu6050
+     0000848A  _initMPU6050                       mpu6050
+     00008511  _getMPU6050                        mpu6050
+     00008544  _main                              mpu6050
+     000086C3  _segmentMap                        mpu6050
+     000086E8  ___fssub                           _fssub
+     00008710  ___fsgt                            _fsgt
+     00008817  __mulint                           _mulint
+     0000886D  ___fsadd                           _fsadd
+     00008BF9  ___uint2fs                         _uint2fs
+     00008C05  ___ulong2fs                        _ulong2fs
 
-ASxxxx Linker V03.00 + NoICE + sdld,  page 11.
-Hexadecimal  [32-Bits]
-
-Area                                    Addr        Size        Decimal Bytes (Attributes)
---------------------------------        ----        ----        ------- ----- ------------
-INITIALIZER                         0000912F    00000002 =           2. bytes (REL,CON)
-
-      Value  Global                              Global Defined In Module
-      -----  --------------------------------   ------------------------
-ASxxxx Linker V03.00 + NoICE + sdld,  page 12.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
 
 Files Linked                              [ module(s) ]
 
@@ -192,14 +162,13 @@ mpu6050.rel                               [  ]
 Libraries Linked                          [ object file ]
 
 /usr/bin/../share/sdcc/lib/stm8/stm8.lib  [ _fssub.rel ]
-/usr/bin/../share/sdcc/lib/stm8/stm8.lib  [ _slong2fs.rel ]
-/usr/bin/../share/sdcc/lib/stm8/stm8.lib  [ _ulong2fs.rel ]
 /usr/bin/../share/sdcc/lib/stm8/stm8.lib  [ _fsgt.rel ]
 /usr/bin/../share/sdcc/lib/stm8/stm8.lib  [ _mulint.rel ]
 /usr/bin/../share/sdcc/lib/stm8/stm8.lib  [ _fsadd.rel ]
-/usr/bin/../share/sdcc/lib/stm8/stm8.lib  [ _mullong.rel ]
+/usr/bin/../share/sdcc/lib/stm8/stm8.lib  [ _uint2fs.rel ]
+/usr/bin/../share/sdcc/lib/stm8/stm8.lib  [ _ulong2fs.rel ]
 
-ASxxxx Linker V03.00 + NoICE + sdld,  page 13.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
 
 User Base Address Definitions
 

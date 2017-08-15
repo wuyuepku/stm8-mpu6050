@@ -6,9 +6,8 @@
 #define READ(x, y)  ((x) & (y))
 #define I2C_READ        1
 #define I2C_WRITE       0
-static unsigned short BMP280_ADDR = 0x76;        //0b01110111
-static long dig_T1,dig_T2,dig_T3;
-static long dig_H1,dig_H2,dig_H3,dig_H4,dig_H5,dig_H6;
+#define MPU6050_ADDR     0x68 
+
 
 
 
@@ -374,155 +373,82 @@ void _tm1637DioLow(void)
 
 
 
-long readBMP280(unsigned short regAddr, short amount){
-	long result = 0;
-	long byteRead;
-
-	UCHAR x,reg ;
-	//	i2c_set_start_ack();
-	//	i2c_send_address (BMP280_ADDR, I2C_WRITE);
-	//	i2c_send_reg(regAddr);
-	//	UARTPrintF("testing readBMP 1\n\r");
-	//	delay(40);
-	//	i2c_set_start_ack();
-	//	i2c_send_address (BMP280_ADDR, I2C_READ);
-	while(amount > 0){
-		//		UARTPrintF("testing readBMP 2\n\r");
-		reg = I2C_SR1;
-		reg = I2C_SR3; 
-		//			i2c_set_nak();
-		//	i2c_set_stop();
-		//	UARTPrintF("testing i2c_ack\n\r");
-		x = i2c_read_register (BMP280_ADDR, regAddr);
-		//	i2c_read (&x);
-		//	UARTPrintF("testing i2c_read\n\r");
-		byteRead=x;
-		result |= byteRead << ((amount-1) * 8);
-		amount --;
-		//	UARTPrintF("testing readBMP 3\n\r");
-		if(amount == 0){
-			i2c_set_nak();
-			//		UARTPrintF("i2c_set_nak\n\r");
-		}
-		//		else{
-		//UARTPrintF("testing readBMP 4\n\r");
-		//					i2c_set_start_ack();
-		//		}
-	}
-	i2c_set_stop();
-	return result;
-}
 
 
-/* Helper functions definitions */
-/*
- * This helper function is used to obtain the calibration
- * parameters and populate the calibration structure
- *
- * parameter | Register address |   bit
- * ----------|------------------|----------------
- * dig_T1    |  0x88 and 0x89   | from 0 : 7 to 8: 15
- * dig_T2    |  0x8A and 0x8B   | from 0 : 7 to 8: 15
- * dig_T3    |  0x8C and 0x8D   | from 0 : 7 to 8: 15
- * dig_P1    |  0x8E and 0x8F   | from 0 : 7 to 8: 15
- * dig_P2    |  0x90 and 0x91   | from 0 : 7 to 8: 15
- * dig_P3    |  0x92 and 0x93   | from 0 : 7 to 8: 15
- * dig_P4    |  0x94 and 0x95   | from 0 : 7 to 8: 15
- * dig_P5    |  0x96 and 0x97   | from 0 : 7 to 8: 15
- * dig_P6    |  0x98 and 0x99   | from 0 : 7 to 8: 15
- * dig_P7    |  0x9A and 0x9B   | from 0 : 7 to 8: 15
- * dig_P8    |  0x9C and 0x9D   | from 0 : 7 to 8: 15
- * dig_P9    |  0x9E and 0x9F   | from 0 : 7 to 8: 15
- * dig_H1    |         0xA1     | from 0 to 7
- * dig_H2    |  0xE1 and 0xE2   | from 0 : 7 to 8: 15
- * dig_H3    |         0xE3     | from 0 to 7
- * dig_H4    |0xE4 and 0xE5[3:0]| from 4 : 11 to 0: 3
- * dig_H5    |0xE5[7:4] and 0xE6| from 0 : 3 to 4: 11
- * dig_H6    |         0xE7     | from 0 to 7
- * 
- * */
-
-
-
-void initBMP280(){
-	unsigned short dig_T1_1 ;
-	unsigned short dig_T1_2 ;
-	unsigned short dig_T2_1 ;
-	unsigned short dig_T2_2 ;
-	unsigned short dig_T3_1 ;
-	unsigned short dig_T3_2 ;
-
-	unsigned short dig_H1_1 ;
-	unsigned short dig_H2_1 ;
-	unsigned short dig_H2_2 ;
-	unsigned short dig_H3_1 ;
-	unsigned short dig_H4_1 ;
-	unsigned short dig_H4_2 ; 
-	unsigned short dig_H5_1 ;
-	unsigned short dig_H5_2 ;
-	unsigned short dig_H6_1 ;
-
-
-
+void initMPU6050(){
 
 	i2c_set_start_ack();
-	i2c_send_address (BMP280_ADDR, I2C_WRITE);
-	i2c_send_reg(0xF4);
-	i2c_send_reg(0x23);
+	i2c_send_address (MPU6050_ADDR, I2C_WRITE);
+	i2c_send_reg(0x6B);
+	i2c_send_reg(0x80);
+	i2c_set_stop();
+	delay(100);
+	i2c_set_start_ack();
+	i2c_send_address (MPU6050_ADDR, I2C_WRITE);
+	i2c_send_reg(0x6B);
+	i2c_send_reg(0x00);
+	i2c_set_stop();
+	delay(100);
+	i2c_set_start_ack();
+	i2c_send_address (MPU6050_ADDR, I2C_WRITE);
+	i2c_send_reg(0x1A);
+	i2c_send_reg(0x01);
+	i2c_set_stop();
+	delay(100);
+	i2c_set_start_ack();
+	i2c_send_address (MPU6050_ADDR, I2C_WRITE);
+	i2c_send_reg(0x1B);
+	i2c_send_reg(0x01);
 	i2c_set_stop();
 
-	dig_T1_2 = readBMP280(0x88,1);
-	dig_T1_1 = readBMP280(0x89,1);
-	dig_T2_1 = readBMP280(0x8B,1);
-	dig_T2_2 = readBMP280(0x8A,1);
-	dig_T3_1 = readBMP280(0x8D,1);
-	dig_T3_2 = readBMP280(0x8C,1);
 
-	dig_T1 = (dig_T1_1 << 8) | dig_T1_2;
-	dig_T2 = (dig_T2_1 << 8) | dig_T2_2;
-	dig_T3 = (dig_T3_1 << 8) | dig_T3_2;
+	//	mpu6050_write(PWR_MGMT_1,  0x80);
+	//	mpu6050_write(PWR_MGMT_1,  0x00);
+	//	mpu6050_write(CONFIG_R,    0x01);
+	//	mpu6050_write(GYRO_CONFIG, 0x00);
 
-//humidity
-	dig_H1_1 = readBMP280(0xA1,1);
-	dig_H2_1 = readBMP280(0xE2,1);
-	dig_H2_2 = readBMP280(0xE1,1);
-	dig_H3_1 = readBMP280(0xE3,1);
-	dig_H4_1 = readBMP280(0xE5,1);
-	dig_H4_2 = readBMP280(0xE4,1);
-	dig_H5_1 = readBMP280(0xE6,1);
-	dig_H5_2 = readBMP280(0xE5,1);
-	dig_H6_1 = readBMP280(0xE7,1);
-dig_H1 = dig_H1_1; 
-dig_H2 = (dig_H1_1 << 8) | dig_H2_2; 
-dig_H3 = dig_H3_1; 
-dig_H4 = dig_H4_1 & 0x0F;
-dig_H5 = (dig_H5_1 << 4) | ((dig_H5_2 & 0xF0)>>4);
-dig_H6 = dig_H6_1;
 }
 
-long getBMP280Temperature(){
-	if(dig_T1 != 0 && dig_T2 != 0 && dig_T3 != 0){
-		long T = readBMP280(0xFA,3) >> 4;
-		long part1 = (T >> 3) - (dig_T1 << 1);
-		long var1 = (part1 * dig_T2) >> 11;
-		long part2 = (T >> 4) - dig_T1;
-		long var2 = (((part2 * part2) >> 12) * dig_T3) >> 14;
-		long t_fine = var1 + var2;
-		long calc = (t_fine * 5 + 128) >> 8;
-		return calc;
-	} else
-		return 0;
+/*
+ *
+#define ACCEL_XOUT_H     0x3B
+#define ACCEL_XOUT_L     0x3C
+#define ACCEL_YOUT_H     0x3D
+#define ACCEL_YOUT_L     0x3E
+#define ACCEL_ZOUT_H     0x3F
+#define ACCEL_ZOUT_L     0x40
+#define TEMP_OUT_H       0x41
+#define TEMP_OUT_L       0x42
+#define GYRO_XOUT_H      0x43
+#define GYRO_XOUT_L      0x44
+#define GYRO_YOUT_H      0x45
+#define GYRO_YOUT_L      0x46
+#define GYRO_ZOUT_H      0x47
+#define GYRO_ZOUT_L      0x48
+ 
+ *
+ */
+
+
+
+
+unsigned int getMPU6050(){
+	UCHAR xh,xl; 
+        unsigned int xx;
+
+	xh = i2c_read_register (MPU6050_ADDR, 0x43);
+	xl = i2c_read_register (MPU6050_ADDR, 0x44);
+	xx = xh << 8 | xl;
+	return(xx);
 }
 
-long getBMP280Humidity(){
-}
 
 int main () {
 	//	char p1,p2;
 	int eerste, tweede, derde, vierde;
 	long utemp;
 	float objTemp;
-//	UCHAR  x;
+	//	UCHAR  x;
 	//	volatile int reg;
 	InitializeSystemClock();
 
@@ -543,12 +469,13 @@ int main () {
 	InitializeI2C();
 	delay(200);
 	//	UARTPrintF("testing 0 \n\r");
-	initBMP280();
+	initMPU6050();
+	delay(200);
 
 
 	//	UARTPrintF("testing 1 \n\r");
 	while (1) {
-		objTemp = getBMP280Temperature();
+		objTemp = getMPU6050();
 		//		UARTPrintF("testing 1 \n\r");
 		eerste=0;tweede=0;derde=0;vierde=0;
 		//make measurement suitable for display
@@ -585,6 +512,5 @@ int main () {
 
 
 		delayTenMicro();
-		//		initBMP280();
 	}
 }
